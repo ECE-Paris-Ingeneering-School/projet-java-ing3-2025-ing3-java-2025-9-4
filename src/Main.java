@@ -13,5 +13,8 @@ public class Main {
         }
 
         System.out.printf("Test push");
+
+        System.out.printf("Test push Thomas");
+
     }
 }
