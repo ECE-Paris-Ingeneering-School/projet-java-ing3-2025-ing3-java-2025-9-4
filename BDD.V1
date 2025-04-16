@@ -1,0 +1,50 @@
+-- Assure-toi que la base existe
+CREATE DATABASE IF NOT EXISTS rendezvous_db;
+USE rendezvous_db;
+
+-- Table Patient
+CREATE TABLE Patient (
+    id_patient INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(50),
+    prenom VARCHAR(50),
+    email VARCHAR(100) UNIQUE,
+    mot_de_passe VARCHAR(255),
+    ancien_patient BOOLEAN DEFAULT FALSE
+);
+
+-- Table Specialiste
+CREATE TABLE Specialiste (
+    id_specialiste INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(100),
+    specialisation VARCHAR(100),
+    qualification TEXT
+);
+
+-- Table Lieu
+CREATE TABLE Lieu (
+    id_lieu INT AUTO_INCREMENT PRIMARY KEY,
+    adresse VARCHAR(255),
+    ville VARCHAR(100)
+);
+
+-- Table Disponibilite
+CREATE TABLE Disponibilite (
+    id_disponibilite INT AUTO_INCREMENT PRIMARY KEY,
+    id_specialiste INT,
+    id_lieu INT,
+    date DATE,
+    heure TIME,
+    disponible BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (id_specialiste) REFERENCES Specialiste(id_specialiste),
+    FOREIGN KEY (id_lieu) REFERENCES Lieu(id_lieu)
+);
+
+-- Table RendezVous
+CREATE TABLE RendezVous (
+    id_rdv INT AUTO_INCREMENT PRIMARY KEY,
+    id_patient INT,
+    id_disponibilite INT,
+    note TEXT,
+    FOREIGN KEY (id_patient) REFERENCES Patient(id_patient),
+    FOREIGN KEY (id_disponibilite) REFERENCES Disponibilite(id_disponibilite)
+);
