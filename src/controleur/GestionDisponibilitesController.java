@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class GestionDisponibilitesControleur {
+public class GestionDisponibilitesController {
     private GestionDisponibilitesVue vue;
     private DisponibiliteDAO dao;
     private SpecialisteDAO sdao;
@@ -23,7 +23,7 @@ public class GestionDisponibilitesControleur {
     private HashMap<String, Specialiste> mapSpecialistes;
     private HashMap<String, Lieu> mapLieux;
 
-    public GestionDisponibilitesControleur() {
+    public GestionDisponibilitesController() {
         vue = new GestionDisponibilitesVue();
         dao = new DisponibiliteDAO();
         sdao = new SpecialisteDAO();
