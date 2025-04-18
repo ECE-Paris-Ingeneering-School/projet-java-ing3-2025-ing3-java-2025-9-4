@@ -1,5 +1,6 @@
 package modele;
 
+
 public class Lieu {
     private int id;
     private String adresse;
