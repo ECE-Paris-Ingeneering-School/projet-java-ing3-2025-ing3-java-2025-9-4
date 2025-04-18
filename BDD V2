@@ -1,0 +1,165 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Hôte : 127.0.0.1:3306
+-- Généré le : ven. 18 avr. 2025 à 20:29
+-- Version du serveur : 8.2.0
+-- Version de PHP : 8.2.13
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de données : `rendezvous_db`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `disponibilite`
+--
+
+DROP TABLE IF EXISTS `disponibilite`;
+CREATE TABLE IF NOT EXISTS `disponibilite` (
+  `id_disponibilite` int NOT NULL AUTO_INCREMENT,
+  `id_specialiste` int DEFAULT NULL,
+  `id_lieu` int DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `heure` time DEFAULT NULL,
+  `disponible` tinyint(1) DEFAULT '1',
+  PRIMARY KEY (`id_disponibilite`),
+  KEY `id_specialiste` (`id_specialiste`),
+  KEY `id_lieu` (`id_lieu`)
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `disponibilite`
+--
+
+INSERT INTO `disponibilite` (`id_disponibilite`, `id_specialiste`, `id_lieu`, `date`, `heure`, `disponible`) VALUES
+(2, 1, 1, '2025-07-01', '10:00:00', 0),
+(3, 2, 2, '2025-05-01', '11:30:00', 0),
+(4, 3, 3, '2025-05-02', '14:00:00', 0),
+(5, 4, 4, '2025-05-03', '10:30:00', 0),
+(6, 5, 5, '2025-05-04', '16:00:00', 1),
+(7, 1, 1, '2025-06-09', '12:30:00', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `lieu`
+--
+
+DROP TABLE IF EXISTS `lieu`;
+CREATE TABLE IF NOT EXISTS `lieu` (
+  `id_lieu` int NOT NULL AUTO_INCREMENT,
+  `adresse` varchar(255) DEFAULT NULL,
+  `ville` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id_lieu`)
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `lieu`
+--
+
+INSERT INTO `lieu` (`id_lieu`, `adresse`, `ville`) VALUES
+(1, '10 rue de la Santé', 'Paris'),
+(2, '12 rue des Lilas', 'Paris'),
+(3, '88 avenue Victor Hugo', 'Lyon'),
+(4, '3 place Bellecour', 'Lyon'),
+(5, '25 boulevard Haussmann', 'Paris'),
+(6, '4 rue Pasteur', 'Marseille');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `patient`
+--
+
+DROP TABLE IF EXISTS `patient`;
+CREATE TABLE IF NOT EXISTS `patient` (
+  `id_patient` int NOT NULL AUTO_INCREMENT,
+  `nom` varchar(50) DEFAULT NULL,
+  `prenom` varchar(50) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `mot_de_passe` varchar(255) DEFAULT NULL,
+  `ancien_patient` tinyint(1) DEFAULT '0',
+  `role` varchar(20) DEFAULT 'patient',
+  PRIMARY KEY (`id_patient`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `patient`
+--
+
+INSERT INTO `patient` (`id_patient`, `nom`, `prenom`, `email`, `mot_de_passe`, `ancien_patient`, `role`) VALUES
+(1, 'Durand', 'Emma', 'emma@example.com', 'azerty', 1, 'admin');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `rendezvous`
+--
+
+DROP TABLE IF EXISTS `rendezvous`;
+CREATE TABLE IF NOT EXISTS `rendezvous` (
+  `id_rdv` int NOT NULL AUTO_INCREMENT,
+  `id_patient` int DEFAULT NULL,
+  `id_disponibilite` int DEFAULT NULL,
+  `note` text,
+  PRIMARY KEY (`id_rdv`),
+  KEY `id_patient` (`id_patient`),
+  KEY `id_disponibilite` (`id_disponibilite`)
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `rendezvous`
+--
+
+INSERT INTO `rendezvous` (`id_rdv`, `id_patient`, `id_disponibilite`, `note`) VALUES
+(1, 1, 1, 'Très bon accueil !'),
+(13, 7, 3, NULL),
+(12, 6, 4, NULL),
+(11, 3, 5, NULL),
+(10, 4, 1, NULL),
+(9, 3, 2, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `specialiste`
+--
+
+DROP TABLE IF EXISTS `specialiste`;
+CREATE TABLE IF NOT EXISTS `specialiste` (
+  `id_specialiste` int NOT NULL AUTO_INCREMENT,
+  `nom` varchar(100) DEFAULT NULL,
+  `specialisation` varchar(100) DEFAULT NULL,
+  `qualification` text,
+  PRIMARY KEY (`id_specialiste`)
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `specialiste`
+--
+
+INSERT INTO `specialiste` (`id_specialiste`, `nom`, `specialisation`, `qualification`) VALUES
+(1, 'Dr. Lefevre', 'Cardiologue', 'Spécialisé en rythmologie'),
+(2, 'Dr. Martin', 'Cardiologue', 'Diplômé de Paris V'),
+(3, 'Dr. Bernard', 'Dermatologue', 'Expert en pathologies cutanées'),
+(4, 'Dr. Lefevre', 'Pédiatre', 'Spécialisé enfants - 0 à 12 ans'),
+(6, 'Dr. Libois', 'Gynécologue', 'Médecin en santé vietnamienne');
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
