@@ -1,5 +1,6 @@
 package vue;
 
+
 import modele.Disponibilite;
 
 import javax.swing.*;
