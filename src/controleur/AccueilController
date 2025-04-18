@@ -21,7 +21,7 @@ public class AccueilController {
 
         vue.setHistoriqueListener(e -> new HistoriqueController(idPatient, nomPatient));
 
-        // Ajout de la déconnexion
+        
         vue.setDeconnexionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
