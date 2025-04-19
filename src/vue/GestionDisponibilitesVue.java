@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class GestionDisponibilitesVue extends JFrame {
+    // Ajout des composants JFrame
     private JTable table;
     private DefaultTableModel tableModel;
     private JComboBox<String> specialisteBox;
@@ -19,22 +20,24 @@ public class GestionDisponibilitesVue extends JFrame {
     private JButton ajouterButton, modifierButton, supprimerButton;
 
     public GestionDisponibilitesVue() {
-        setTitle("Gestion des Créneaux");
+        setTitle("Gestion des Créneaux"); // Paramétrage de la fênetre
         setSize(800, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        // Tableau d'affichage des créneaux
         tableModel = new DefaultTableModel(new String[]{"ID", "Spécialiste", "Lieu", "Date", "Heure", "Disponible"}, 0);
         table = new JTable(tableModel);
         JScrollPane scroll = new JScrollPane(table);
 
-        specialisteBox = new JComboBox<>();
+        specialisteBox = new JComboBox<>(); // création de champs pour rentrer les informations
         lieuBox = new JComboBox<>();
         dateField = new JTextField();
         heureField = new JTextField();
         disponibleCheck = new JCheckBox("Disponible", true);
 
-        JPanel formPanel = new JPanel(new GridLayout(6, 2, 5, 5));
+        JPanel formPanel = new JPanel(new GridLayout(6, 2, 5, 5)); // Organisatino des champs
+        // Ajout des éléments dans le formulaire
         formPanel.add(new JLabel("Spécialiste :"));
         formPanel.add(specialisteBox);
 
@@ -54,18 +57,18 @@ public class GestionDisponibilitesVue extends JFrame {
         modifierButton = new JButton("Modifier");
         supprimerButton = new JButton("Supprimer");
 
-        formPanel.add(ajouterButton);
+        formPanel.add(ajouterButton); // création des différents bouttons
         formPanel.add(modifierButton);
         formPanel.add(supprimerButton);
 
         setLayout(new BorderLayout(10, 10));
-        add(scroll, BorderLayout.CENTER);
-        add(formPanel, BorderLayout.SOUTH);
+        add(scroll, BorderLayout.CENTER); // table au centre
+        add(formPanel, BorderLayout.SOUTH); // formulaire en bas
     }
 
     public void setSpecialistes(String[] noms) {
         specialisteBox.setModel(new DefaultComboBoxModel<>(noms));
-    }
+    } // remplit les boxes avec les specialistes et lieux récuperer par le controleur
 
     public void setLieux(String[] lieux) {
         lieuBox.setModel(new DefaultComboBoxModel<>(lieux));
@@ -84,7 +87,7 @@ public class GestionDisponibilitesVue extends JFrame {
 
     public void viderTable() {
         tableModel.setRowCount(0);
-    }
+    } // vide la table
 
     public int getSelectionId() {
         int row = table.getSelectedRow();
