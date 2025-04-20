@@ -6,7 +6,7 @@ public class Lieu {
     private String adresse;
     private String ville;
 
-    public Lieu(int id, String adresse, String ville) { // Création du constructeur lieu
+    public Lieu(int id, String adresse, String ville) { // Création du constructeur lieu et assignation des variables
         this.id = id;
         this.adresse = adresse;
         this.ville = ville;
