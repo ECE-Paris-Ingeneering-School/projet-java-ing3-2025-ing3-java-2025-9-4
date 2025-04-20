@@ -74,7 +74,7 @@ public class GestionDisponibilitesVue extends JFrame {
         lieuBox.setModel(new DefaultComboBoxModel<>(lieux));
     }
 
-    public void ajouterLigne(Disponibilite d) {
+    public void ajouterLigne(Disponibilite d) { // Ajout de ligne dans la dispo
         tableModel.addRow(new Object[]{
                 d.getId(),
                 d.getSpecialiste().getNom(),
