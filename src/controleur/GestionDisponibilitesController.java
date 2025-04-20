@@ -108,7 +108,7 @@ public class GestionDisponibilitesController { // Controleut pour la gestion des
             if (dao.supprimerDisponibilite(id)) { // Appel DAO pour supprimer en BDD
                 vue.afficherMessage("Créneau supprimé !");
                 chargerListe();
-            } else {
+            } else { // Erreur si ça ne marche pas
                 vue.afficherErreur("Erreur lors de la suppression.");
             }
         });
