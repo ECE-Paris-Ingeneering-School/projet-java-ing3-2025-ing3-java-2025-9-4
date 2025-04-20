@@ -66,7 +66,7 @@ public class LieuDAO {
         }
     }
 
-    public boolean supprimerLieu(int id) { // Requete de suppresion d'un lieu
+    public boolean supprimerLieu(int id) { // Requete de suppresion d'un lieu avec requete SQL
         String sql = "DELETE FROM Lieu WHERE id_lieu = ?";
 
         try (Connection conn = BaseDeDonnees.getConnexion(); // Execute la suppresion
@@ -79,6 +79,7 @@ public class LieuDAO {
             System.err.println("Erreur suppression lieu : " + e.getMessage());
             return false;
         }
+
     }
 }
 
