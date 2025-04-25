@@ -1,6 +1,5 @@
 package vue;
 
-// Importation des classes nécessaires
 import modele.Disponibilite;
 
 import javax.swing.*;
@@ -9,63 +8,113 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class PriseRendezVousVue extends JFrame {
-    // Champs de texte pour les filtres de recherche
     private JTextField specialisationField;
     private JTextField villeField;
     private JTextField dateField;
-
-    // Boutons pour rechercher et réserver un créneau
     private JButton rechercherButton;
     private JButton reserverButton;
-
-    // Liste des disponibilités à afficher
     private DefaultListModel<Disponibilite> listeModel;
     private JList<Disponibilite> listeDispos;
 
-    // Constructeur de la vue
     public PriseRendezVousVue() {
-        setTitle("Prise de Rendez-vous");                         // Titre de la fenêtre
-        setSize(600, 500);                                        // Taille de la fenêtre
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);        // Ferme uniquement cette fenêtre sans quitter l'appli
-        setLocationRelativeTo(null);                              // Centre la fenêtre à l'écran
+        setTitle("Prise de Rendez-vous - EKSASOTE");
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // 🧩 Création du panneau de filtres pour la recherche
-        JPanel filtresPanel = new JPanel(new GridLayout(4, 2));
+        // Couleurs
+        Color bleu = new Color(0x002366);
+        Color jaune = new Color(230, 200, 80);
 
-        // Champ : spécialisation
-        filtresPanel.add(new JLabel("Spécialisation :"));
+        // Fonts
+        Font labelFont = new Font("SansSerif", Font.BOLD, 20);
+        Font inputFont = new Font("SansSerif", Font.PLAIN, 18);
+        Font buttonFont = new Font("SansSerif", Font.BOLD, 20);
+
+        // Titre
+        JLabel titreLabel = new JLabel("Prise de Rendez-vous", SwingConstants.CENTER);
+        titreLabel.setFont(new Font("SansSerif", Font.BOLD, 48));
+        titreLabel.setForeground(bleu);
+        titreLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 30, 0));
+
+        // Formulaire de recherche
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        formPanel.setPreferredSize(new Dimension(600, 400));
+        formPanel.setBackground(new Color(255, 255, 255, 230));
+        formPanel.setBorder(BorderFactory.createLineBorder(jaune, 4, true));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(15, 15, 15, 15);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
+        gbc.weightx = 1;
+
+        // Spécialisation
+        gbc.gridy = 0;
+        formPanel.add(createLabel("Spécialisation :", labelFont), gbc);
+        gbc.gridy++;
         specialisationField = new JTextField();
-        filtresPanel.add(specialisationField);
+        specialisationField.setFont(inputFont);
+        formPanel.add(specialisationField, gbc);
 
-        // Champ : ville
-        filtresPanel.add(new JLabel("Ville :"));
+        // Ville
+        gbc.gridy++;
+        formPanel.add(createLabel("Ville :", labelFont), gbc);
+        gbc.gridy++;
         villeField = new JTextField();
-        filtresPanel.add(villeField);
+        villeField.setFont(inputFont);
+        formPanel.add(villeField, gbc);
 
-        // Champ : date
-        filtresPanel.add(new JLabel("Date (yyyy-mm-dd) :"));
+        // Date
+        gbc.gridy++;
+        formPanel.add(createLabel("Date (yyyy-mm-dd) :", labelFont), gbc);
+        gbc.gridy++;
         dateField = new JTextField();
-        filtresPanel.add(dateField);
+        dateField.setFont(inputFont);
+        formPanel.add(dateField, gbc);
 
-        // Boutons de recherche et de réservation
+        // Boutons
+        gbc.gridy++;
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
+        buttonPanel.setOpaque(false);
+
         rechercherButton = new JButton("Rechercher");
-        reserverButton = new JButton("Prendre ce rendez-vous");
-        filtresPanel.add(rechercherButton);
-        filtresPanel.add(reserverButton);
+        rechercherButton.setFont(buttonFont);
+        rechercherButton.setBackground(bleu);
+        rechercherButton.setForeground(Color.WHITE);
+        buttonPanel.add(rechercherButton);
 
-        // 📜 Liste des créneaux disponibles (initialement vide)
+        reserverButton = new JButton("Prendre ce rendez-vous");
+        reserverButton.setFont(buttonFont);
+        reserverButton.setBackground(jaune);
+        reserverButton.setForeground(Color.BLACK);
+        buttonPanel.add(reserverButton);
+
+        formPanel.add(buttonPanel, gbc);
+
+        // Liste des disponibilités
         listeModel = new DefaultListModel<>();
         listeDispos = new JList<>(listeModel);
-        listeDispos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Une seule sélection possible
-        JScrollPane scroll = new JScrollPane(listeDispos);                 // Ajout d’un ascenseur à la liste
+        listeDispos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listeDispos.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        JScrollPane scrollPane = new JScrollPane(listeDispos);
+        scrollPane.setBorder(BorderFactory.createTitledBorder("Créneaux disponibles"));
 
-        // Mise en page de la fenêtre
-        setLayout(new BorderLayout());
-        add(filtresPanel, BorderLayout.NORTH);   // Le haut de la fenêtre contient les filtres
-        add(scroll, BorderLayout.CENTER);        // Le centre contient la liste des créneaux
+        // Conteneur principal
+        JPanel container = new JPanel(new BorderLayout(20, 20));
+        container.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
+        container.add(titreLabel, BorderLayout.NORTH);
+        container.add(formPanel, BorderLayout.WEST);
+        container.add(scrollPane, BorderLayout.CENTER);
+
+        setContentPane(container);
     }
 
-    // --- Méthodes pour accéder aux champs de texte ---
+    private JLabel createLabel(String text, Font font) {
+        JLabel label = new JLabel(text);
+        label.setFont(font);
+        label.setForeground(Color.BLACK);
+        return label;
+    }
 
     public String getSpecialisation() {
         return specialisationField.getText().trim();
@@ -79,8 +128,6 @@ public class PriseRendezVousVue extends JFrame {
         return dateField.getText().trim();
     }
 
-    // --- Méthodes pour connecter les boutons à des actions (listeners) ---
-
     public void setRechercherListener(ActionListener listener) {
         rechercherButton.addActionListener(listener);
     }
@@ -89,29 +136,25 @@ public class PriseRendezVousVue extends JFrame {
         reserverButton.addActionListener(listener);
     }
 
-    // Affiche les résultats de la recherche dans la liste
     public void afficherResultats(List<Disponibilite> disponibilites) {
-        listeModel.clear(); // On vide d’abord la liste
+        listeModel.clear();
         if (disponibilites.isEmpty()) {
             afficherMessage("Aucun créneau trouvé.");
         } else {
             for (Disponibilite d : disponibilites) {
-                listeModel.addElement(d); // On ajoute chaque dispo dans la liste
+                listeModel.addElement(d);
             }
         }
     }
 
-    // Récupère la disponibilité sélectionnée par l’utilisateur
     public Disponibilite getSelection() {
         return listeDispos.getSelectedValue();
     }
 
-    // Affiche un message d'information
     public void afficherMessage(String message) {
         JOptionPane.showMessageDialog(this, message);
     }
 
-    // Affiche un message d'erreur
     public void afficherErreur(String message) {
         JOptionPane.showMessageDialog(this, message, "Erreur", JOptionPane.ERROR_MESSAGE);
     }
