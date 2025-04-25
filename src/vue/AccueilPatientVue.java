@@ -1,9 +1,12 @@
 package vue;
 
-
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class AccueilPatientVue extends JFrame {
     private JButton rdvButton;
@@ -13,57 +16,129 @@ public class AccueilPatientVue extends JFrame {
 
     public AccueilPatientVue(String nomPatient) {
         setTitle("Bienvenue " + nomPatient);
-        setSize(400, 320);
+        setExtendedState(JFrame.MAXIMIZED_BOTH); // Plein écran
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
 
-        // --- Titre ---
-        JLabel titre = new JLabel("Espace Patient");
-        titre.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        titre.setHorizontalAlignment(SwingConstants.CENTER);
-        titre.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
-
-        // --- Boutons ---
-        rdvButton = new JButton("Prendre un rendez-vous");
-        agendaButton = new JButton("Voir mon agenda");
-        historiqueButton = new JButton("Voir mon historique");
-        deconnexionButton = new JButton("Se déconnecter");
-
-        JButton[] boutons = {rdvButton, agendaButton, historiqueButton, deconnexionButton};
-        for (JButton b : boutons) {
-            b.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-            b.setFocusPainted(false);
-            b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            b.setPreferredSize(new Dimension(280, 35));
+        // --- Fond d'écran ---
+        JLabel backgroundLabel;
+        try {
+            BufferedImage image = ImageIO.read(new File("Images/fond_accueil.jpg")); // ton image stylée
+            backgroundLabel = new JLabel(new ImageIcon(image));
+            backgroundLabel.setLayout(new GridBagLayout());
+        } catch (IOException e) {
+            System.err.println("Image de fond introuvable : " + e.getMessage());
+            backgroundLabel = new JLabel();
+            backgroundLabel.setLayout(new GridBagLayout());
+            backgroundLabel.setOpaque(true);
+            backgroundLabel.setBackground(Color.LIGHT_GRAY);
         }
 
-        // --- Panel central vertical ---
-        JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-        centerPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 20));
-        centerPanel.setBackground(new Color(245, 245, 245));
+        // --- Conteneur principal ---
+        JPanel containerPanel = new JPanel(new BorderLayout());
+        containerPanel.setOpaque(false);
 
-        centerPanel.add(center(rdvButton));
-        centerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        centerPanel.add(center(agendaButton));
-        centerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        centerPanel.add(center(historiqueButton));
-        centerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        centerPanel.add(center(deconnexionButton));
+        // --- Titre ---
+        JLabel titre = new JLabel("\uD83D\uDEE0\uFE0F Espace Client \uD83D\uDEE0\uFE0F", SwingConstants.CENTER);
+        titre.setFont(new Font("SansSerif", Font.BOLD, 48));
+        titre.setForeground(Color.WHITE);
+        titre.setBorder(BorderFactory.createEmptyBorder(30, 0, 30, 0));
 
-        // --- Mise en page finale ---
-        setLayout(new BorderLayout());
-        add(titre, BorderLayout.NORTH);
-        add(centerPanel, BorderLayout.CENTER);
+        // --- Formulaire stylé avec coins arrondis ---
+        RoundedPanel formPanel = new RoundedPanel(30);
+        formPanel.setLayout(new GridLayout(5, 1, 20, 20));
+        formPanel.setPreferredSize(new Dimension(500, 450));
+        formPanel.setBackground(new Color(20, 20, 50, 180)); // violet/bleu sombre semi-transparent
+        formPanel.setBorder(BorderFactory.createEmptyBorder(40, 60, 40, 60));
+
+        Font buttonFont = new Font("SansSerif", Font.BOLD, 20);
+        Color mainColor = new Color(102, 0, 204);         // Violet néon
+        Color hoverMainColor = new Color(153, 51, 255);   // Plus clair
+        Color yellowColor = new Color(255, 215, 0);
+        Color hoverYellowColor = new Color(255, 235, 59);
+
+
+        rdvButton = createStyledButton("\uD83D\uDCC5 Prendre un rendez-vous", buttonFont, mainColor, hoverMainColor);
+        agendaButton = createStyledButton("\uD83D\uDDD3\uFE0F Voir mon agenda", buttonFont, mainColor, hoverMainColor);
+        historiqueButton = createStyledButton("\uD83D\uDCDC Voir mon historique", buttonFont, mainColor, hoverMainColor);
+        deconnexionButton = createStyledButton("🚪 Se déconnecter", buttonFont, yellowColor, hoverYellowColor);
+
+        formPanel.add(rdvButton);
+        formPanel.add(agendaButton);
+        formPanel.add(historiqueButton);
+        formPanel.add(deconnexionButton);
+
+        containerPanel.add(titre, BorderLayout.NORTH);
+        containerPanel.add(formPanel, BorderLayout.CENTER);
+
+        backgroundLabel.add(containerPanel, new GridBagConstraints());
+
+        setContentPane(backgroundLabel);
     }
 
-    private JPanel center(JButton button) {
-        JPanel wrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        wrapper.setOpaque(false);
-        wrapper.add(button);
-        return wrapper;
+    private JButton createStyledButton(String text, Font font, Color bgColor, Color hoverColor) {
+        JButton button = new JButton(text) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(getBackground());
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 30, 30);
+                super.paintComponent(g2);
+                g2.dispose();
+            }
+
+            @Override
+            protected void paintBorder(Graphics g) {
+                // Pas de bordure
+            }
+        };
+
+        button.setFont(font);
+        button.setForeground(Color.WHITE);
+        button.setBackground(bgColor);
+        button.setFocusPainted(false);
+        button.setContentAreaFilled(false);
+        button.setOpaque(false);
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                button.setBackground(hoverColor);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                button.setBackground(bgColor);
+            }
+        });
+
+        return button;
     }
 
+    // --- Panel à coins arrondis ---
+    static class RoundedPanel extends JPanel {
+        private final int radius;
+
+        public RoundedPanel(int radius) {
+            this.radius = radius;
+            setOpaque(false);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setColor(getBackground());
+            g2.fillRoundRect(0, 0, getWidth(), getHeight(), radius, radius);
+            g2.dispose();
+            super.paintComponent(g);
+        }
+    }
+
+    // --- Listeners publics ---
     public void setPrendreRdvListener(ActionListener listener) {
         rdvButton.addActionListener(listener);
     }
