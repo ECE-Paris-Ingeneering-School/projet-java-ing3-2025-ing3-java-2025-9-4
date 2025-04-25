@@ -1,9 +1,12 @@
 package vue;
 
-
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class InscriptionVue extends JFrame {
     private JTextField nomField, prenomField, emailField;
@@ -11,33 +14,84 @@ public class InscriptionVue extends JFrame {
     private JButton inscrireButton;
 
     public InscriptionVue() {
-        setTitle("Inscription Patient");
-        setSize(400, 250);
+        setTitle("Inscription - EKSASOTE");
+        setExtendedState(JFrame.MAXIMIZED_BOTH); // Plein écran
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
 
-        JPanel panel = new JPanel(new GridLayout(5, 2));
-        panel.add(new JLabel("Nom :"));
-        nomField = new JTextField();
-        panel.add(nomField);
+        // Fond d'écran
+        JLabel backgroundLabel;
+        try {
+            BufferedImage image = ImageIO.read(new File("Images/fond_inscription.png"));
+            backgroundLabel = new JLabel(new ImageIcon(image));
+            backgroundLabel.setLayout(new GridBagLayout()); // Centrer le contenu
+        } catch (IOException e) {
+            System.err.println("Image de fond introuvable : " + e.getMessage());
+            backgroundLabel = new JLabel();
+            backgroundLabel.setLayout(new GridBagLayout());
+            backgroundLabel.setOpaque(true);
+            backgroundLabel.setBackground(Color.LIGHT_GRAY);
+        }
 
-        panel.add(new JLabel("Prénom :"));
+        // Conteneur titre + formulaire
+        JPanel containerPanel = new JPanel();
+        containerPanel.setLayout(new BorderLayout());
+        containerPanel.setOpaque(false);
+
+        // Titre
+        JLabel titreLabel = new JLabel("EKSASOTE", SwingConstants.CENTER);
+        titreLabel.setFont(new Font("SansSerif", Font.BOLD, 48));
+        titreLabel.setForeground(Color.WHITE);
+        titreLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 30, 0));
+
+        // Grand Formulaire
+        JPanel formPanel = new JPanel(new GridLayout(5, 2, 20, 20));
+        formPanel.setPreferredSize(new Dimension(600, 400));
+        formPanel.setBackground(new Color(255, 255, 255, 230));
+        formPanel.setBorder(BorderFactory.createEmptyBorder(40, 60, 40, 60));
+
+        Font labelFont = new Font("SansSerif", Font.PLAIN, 20);
+        Font inputFont = new Font("SansSerif", Font.PLAIN, 20);
+        Font buttonFont = new Font("SansSerif", Font.BOLD, 20);
+
+        JLabel prenomLabel = new JLabel("Prénom:");
+        prenomLabel.setFont(labelFont);
         prenomField = new JTextField();
-        panel.add(prenomField);
+        prenomField.setFont(inputFont);
+        formPanel.add(prenomLabel);
+        formPanel.add(prenomField);
 
-        panel.add(new JLabel("Email :"));
+        JLabel nomLabel = new JLabel("Nom:");
+        nomLabel.setFont(labelFont);
+        nomField = new JTextField();
+        nomField.setFont(inputFont);
+        formPanel.add(nomLabel);
+        formPanel.add(nomField);
+
+        JLabel emailLabel = new JLabel("Email:");
+        emailLabel.setFont(labelFont);
         emailField = new JTextField();
-        panel.add(emailField);
+        emailField.setFont(inputFont);
+        formPanel.add(emailLabel);
+        formPanel.add(emailField);
 
-        panel.add(new JLabel("Mot de passe :"));
+        JLabel mdpLabel = new JLabel("Mot de passe:");
+        mdpLabel.setFont(labelFont);
         motDePasseField = new JPasswordField();
-        panel.add(motDePasseField);
+        motDePasseField.setFont(inputFont);
+        formPanel.add(mdpLabel);
+        formPanel.add(motDePasseField);
 
         inscrireButton = new JButton("S'inscrire");
-        panel.add(new JLabel());
-        panel.add(inscrireButton);
+        inscrireButton.setFont(buttonFont);
+        formPanel.add(new JLabel()); // espace vide
+        formPanel.add(inscrireButton);
 
-        add(panel);
+        containerPanel.add(titreLabel, BorderLayout.NORTH);
+        containerPanel.add(formPanel, BorderLayout.CENTER);
+
+        backgroundLabel.add(containerPanel, new GridBagConstraints());
+
+        setContentPane(backgroundLabel);
     }
 
     public String getNom() { return nomField.getText(); }
