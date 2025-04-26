@@ -1,6 +1,5 @@
 package controleur;
 
-
 import dao.PatientDAO;
 import modele.Patient;
 import vue.InscriptionVue;
@@ -22,21 +21,20 @@ public class InscriptionController {
                 String nom = vue.getNom();
                 String prenom = vue.getPrenom();
                 String email = vue.getEmail();
-                String mdp = vue.getMotDePasse();
+                String motDePasse = vue.getMotDePasse();
 
-                if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || mdp.isEmpty()) {
+                if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || motDePasse.isEmpty()) {
                     vue.afficherErreur("Tous les champs sont obligatoires !");
                     return;
                 }
 
-                Patient nouveau = new Patient(0, nom, prenom, email, mdp, false, "patient");
-                boolean success = dao.ajouterPatient(nouveau);
+                Patient nouveauPatient = new Patient(0, nom, prenom, email, motDePasse, false, "patient");
+                boolean success = dao.ajouterPatient(nouveauPatient);
 
                 if (success) {
-                    vue.afficherMessage("Inscription réussie !");
-                    vue.dispose();
+                    vue.dispose(); // ✅ Fermer la fenêtre sans message inutile
                 } else {
-                    vue.afficherErreur("Erreur lors de l'inscription.");
+                    vue.afficherErreur("Erreur lors de l'inscription."); // ✅ On garde l'erreur si problème
                 }
             }
         });
