@@ -8,6 +8,28 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+class BackgroundPanel extends JPanel {
+    private Image backgroundImage;
+
+    public BackgroundPanel(String imagePath) {
+        try {
+            backgroundImage = ImageIO.read(new File(imagePath));
+        } catch (IOException e) {
+            System.err.println("Image de fond introuvable : " + e.getMessage());
+        }
+        setLayout(new GridBagLayout());
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (backgroundImage != null) {
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
+}
+
+
 public class AccueilPatientVue extends JFrame {
     private JButton rdvButton;
     private JButton agendaButton;
@@ -20,18 +42,8 @@ public class AccueilPatientVue extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // --- Fond d'écran ---
-        JLabel backgroundLabel;
-        try {
-            BufferedImage image = ImageIO.read(new File("Images/fond_accueil.jpg")); // ton image stylée
-            backgroundLabel = new JLabel(new ImageIcon(image));
-            backgroundLabel.setLayout(new GridBagLayout());
-        } catch (IOException e) {
-            System.err.println("Image de fond introuvable : " + e.getMessage());
-            backgroundLabel = new JLabel();
-            backgroundLabel.setLayout(new GridBagLayout());
-            backgroundLabel.setOpaque(true);
-            backgroundLabel.setBackground(Color.LIGHT_GRAY);
-        }
+        BackgroundPanel backgroundLabel = new BackgroundPanel("Images/fond_accueil.jpg");
+
 
         // --- Conteneur principal ---
         JPanel containerPanel = new JPanel(new BorderLayout());

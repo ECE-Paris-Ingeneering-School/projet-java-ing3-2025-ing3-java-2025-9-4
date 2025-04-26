@@ -1,12 +1,9 @@
 package controleur;
 
-
 import dao.PatientDAO;
 import modele.Patient;
-import vue.AccueilPatientVue;
 import vue.ConnexionVue;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -18,36 +15,41 @@ public class AuthentificationController {
         vue = new ConnexionVue();
         dao = new PatientDAO();
 
+        // Listener pour le bouton "Se connecter"
         vue.setConnexionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String email = vue.getEmail();
-                String mdp = vue.getMotDePasse();
-                Patient patient = dao.getPatientParEmailEtMotDePasse(email, mdp);
-                if (patient != null) {
-                    vue.dispose();
-                    JOptionPane.showMessageDialog(null, "Connexion réussie !");
+                String motDePasse = vue.getMotDePasse();
 
-                    if (patient.getRole().equalsIgnoreCase("admin")) {
-                        new AdminDashboardController(); // 👈 à créer
+                Patient patient = dao.getPatientParEmailEtMotDePasse(email, motDePasse);
+
+                if (patient != null) {
+                    // Connexion réussie : fermer la fenêtre de connexion
+                    vue.dispose();
+
+                    // Rediriger en fonction du rôle
+                    if ("admin".equalsIgnoreCase(patient.getRole())) {
+                        new AdminDashboardController(); // A créer
                     } else {
                         new AccueilController(patient.getId(), patient.getPrenom());
                     }
                 } else {
+                    // Connexion échouée : afficher une erreur
                     vue.afficherErreur("Email ou mot de passe incorrect");
                 }
-
             }
         });
 
-        // 👉 Nouveau bouton inscription
+        // Listener pour le bouton "Créer un compte"
         vue.setInscriptionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new InscriptionController(); // ouvre le formulaire
+                new InscriptionController(); // Ouvre la page d'inscription
             }
         });
 
+        // Afficher la fenêtre de connexion
         vue.setVisible(true);
     }
 }
