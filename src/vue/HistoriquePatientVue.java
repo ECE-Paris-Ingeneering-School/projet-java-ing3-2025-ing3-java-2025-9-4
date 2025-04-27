@@ -2,54 +2,92 @@ package vue;
 
 import modele.RendezVous;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class HistoriquePatientVue extends JFrame {
-    // Modèle pour gérer dynamiquement les données de la liste
     private DefaultListModel<RendezVous> modelListe;
-    
-    // Composant JList pour afficher la liste des rendez-vous
     private JList<RendezVous> listeRdv;
 
-    // Constructeur de la fenêtre, prend le nom du patient pour le titre
     public HistoriquePatientVue(String nomPatient) {
-        setTitle("Historique de " + nomPatient);               // Titre personnalisé
-        setSize(500, 400);                                     // Taille de la fenêtre
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);     // Fermer uniquement cette vue
-        setLocationRelativeTo(null);                           // Centrage de la fenêtre
+        setTitle("Historique de " + nomPatient);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // Initialisation de la liste et du modèle associé
+        BackgroundPanel backgroundPanel = new BackgroundPanel("Images/4.png");
+
+        Color rouge = new Color(208, 56, 56);
+        Color transparentBlanc = new Color(255, 255, 255, 220);
+
+        Font titleFont = new Font("SansSerif", Font.BOLD, 48);
+        Font listFont = new Font("SansSerif", Font.PLAIN, 18);
+
+        JLabel titre = new JLabel("\ud83d\udcdc Historique des Rendez-vous \ud83d\udcdc", SwingConstants.CENTER);
+        titre.setFont(titleFont);
+        titre.setForeground(rouge);
+        titre.setBorder(BorderFactory.createEmptyBorder(30, 0, 30, 0));
+
         modelListe = new DefaultListModel<>();
         listeRdv = new JList<>(modelListe);
+        listeRdv.setFont(listFont);
+        listeRdv.setOpaque(false);
 
-        // Ajout d’un scroll si la liste est longue
-        JScrollPane scroll = new JScrollPane(listeRdv);
+        JScrollPane scrollPane = new JScrollPane(listeRdv);
+        scrollPane.setPreferredSize(new Dimension(600, 300));
+        scrollPane.setBorder(BorderFactory.createLineBorder(rouge, 3, true));
 
-        // Création d’un titre visuel pour la section
-        JLabel titre = new JLabel("Rendez-vous passés", SwingConstants.CENTER);
-        titre.setFont(new Font("Arial", Font.BOLD, 18));       // Mise en forme du titre
+        JPanel container = new JPanel(new GridBagLayout());
+        container.setOpaque(false);
 
-        // Agencement de la fenêtre avec BorderLayout
-        setLayout(new BorderLayout());
-        add(titre, BorderLayout.NORTH);   // Titre en haut
-        add(scroll, BorderLayout.CENTER); // Liste au centre
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(0, 0, 20, 0);
+        container.add(titre, gbc);
+
+        gbc.gridy = 1;
+        container.add(scrollPane, gbc);
+
+        backgroundPanel.add(container);
+
+        setContentPane(backgroundPanel);
     }
 
-    // Méthode publique pour afficher les rendez-vous passés
     public void afficherHistorique(List<RendezVous> rdvList) {
-        modelListe.clear(); // On vide le contenu précédent
+        modelListe.clear();
 
-        // Si la liste est vide, on ajoute un message par défaut
         if (rdvList.isEmpty()) {
-            modelListe.addElement(new RendezVous(-1, null, "Aucun rendez-vous passé."));
+            modelListe.addElement(new RendezVous(-1, null, "Aucun rendez-vous pass\u00e9."));
         } else {
-            // Sinon, on ajoute tous les rendez-vous un par un
             for (RendezVous rdv : rdvList) {
                 modelListe.addElement(rdv);
             }
         }
     }
-}
 
+    static class BackgroundPanel extends JPanel {
+        private Image backgroundImage;
+
+        public BackgroundPanel(String imagePath) {
+            try {
+                backgroundImage = ImageIO.read(new File(imagePath));
+            } catch (IOException e) {
+                System.err.println("Erreur chargement image : " + e.getMessage());
+            }
+            setLayout(new GridBagLayout());
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if (backgroundImage != null) {
+                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+            }
+        }
+    }
+}
