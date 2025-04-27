@@ -5,14 +5,13 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 public class InscriptionVue extends JFrame {
     private RoundedTextField nomField, prenomField, emailField;
     private RoundedPasswordField motDePasseField;
-    private RoundedButton inscrireButton;
+    private RoundedButton inscrireButton, retourButton;
 
     public InscriptionVue() {
         setTitle("Inscription - EKSASOTE");
@@ -45,8 +44,6 @@ public class InscriptionVue extends JFrame {
         gbc.gridx = 0;
         gbc.weightx = 1;
 
-
-
         // --- Champs ---
         gbc.gridy = 0;
         formPanel.add(createLabel("👤 Prénom :", labelFont), gbc);
@@ -76,15 +73,25 @@ public class InscriptionVue extends JFrame {
         motDePasseField.setFont(inputFont);
         formPanel.add(motDePasseField, gbc);
 
-        // --- Bouton ---
-        gbc.gridy++;
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
+        // --- Boutons "Inscrire" et "Retour" côte à côte ---
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));  // Aligner horizontalement
         buttonPanel.setOpaque(false);
 
+        // Bouton "S'inscrire"
         inscrireButton = new RoundedButton("S'inscrire", rouge, Color.WHITE);
         inscrireButton.setFont(buttonFont);
 
+        // Bouton "Retour"
+        retourButton = new RoundedButton("Retour", rouge, Color.WHITE);
+        retourButton.setFont(buttonFont);
+        retourButton.addActionListener(e -> dispose()); // Ferme la fenêtre
+
+        // Ajouter les deux boutons dans le panneau
         buttonPanel.add(inscrireButton);
+        buttonPanel.add(retourButton);  // Ajouter retour juste après inscrire
+
+        // Ajouter le panneau des boutons à la grille
+        gbc.gridy++;
         formPanel.add(buttonPanel, gbc);
 
         // --- Conteneur principal ---
@@ -95,11 +102,12 @@ public class InscriptionVue extends JFrame {
         // --- Placement : centré verticalement ---
         GridBagConstraints containerConstraints = new GridBagConstraints();
         containerConstraints.gridy = 0;
-        containerConstraints.anchor = GridBagConstraints.CENTER; // Au centre
-        containerConstraints.insets = new Insets(130, 0, 0, 0); // Pas de décalage vertical
+        containerConstraints.anchor = GridBagConstraints.CENTER;  // Au centre
+        containerConstraints.insets = new Insets(130, 0, 0, 0);  // Pas de décalage vertical
 
         backgroundPanel.add(container, containerConstraints);
 
+        // --- Ajouter le fond d'écran ---
         setContentPane(backgroundPanel);
     }
 

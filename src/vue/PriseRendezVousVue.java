@@ -16,7 +16,7 @@ public class PriseRendezVousVue extends JFrame {
     private JTextField villeField;
     private JTextField dateField;
     private JButton rechercherButton;
-    private JButton reserverButton;
+    private JButton reserverButton, retourButton;
     private DefaultListModel<Disponibilite> listeModel;
     private JList<Disponibilite> listeDispos;
 
@@ -93,6 +93,12 @@ public class PriseRendezVousVue extends JFrame {
         reserverButton.setForeground(Color.WHITE);
         buttonPanel.add(reserverButton);
 
+        retourButton = new JButton("Retour");
+        retourButton.setFont(buttonFont);
+        retourButton.setBackground(rouge);
+        retourButton.setForeground(Color.WHITE);
+        retourButton.addActionListener(e -> dispose()); // Ferme la fenêtre
+
         formPanel.add(buttonPanel, gbc);
 
         // Liste des disponibilités
@@ -107,6 +113,13 @@ public class PriseRendezVousVue extends JFrame {
         // Conteneur principal
         JPanel container = new JPanel(new GridBagLayout());
         container.setOpaque(false);
+
+        GridBagConstraints containerGbc2 = new GridBagConstraints(); // Placement bouton Retour
+        containerGbc2.insets = new Insets(20, 20, 20, 20);
+        containerGbc2.gridx = 0;
+        containerGbc2.gridy = 0;
+        containerGbc2.anchor = GridBagConstraints.NORTHWEST; // Ancrage en haut à gauche
+        container.add(retourButton, containerGbc2);
 
         GridBagConstraints containerGbc = new GridBagConstraints();
         containerGbc.insets = new Insets(-50, 20, 20, 20);

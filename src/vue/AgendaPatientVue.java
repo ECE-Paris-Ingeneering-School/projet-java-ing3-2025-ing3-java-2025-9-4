@@ -13,6 +13,7 @@ import java.util.List;
 public class AgendaPatientVue extends JFrame {
     private DefaultListModel<RendezVous> modelListe;
     private JList<RendezVous> listeRdv;
+    private JButton retourButton;
 
     public AgendaPatientVue(String nomPatient) {
         setTitle("Agenda de " + nomPatient);
@@ -25,12 +26,19 @@ public class AgendaPatientVue extends JFrame {
         Color rouge = new Color(208, 56, 56);
         Color noir = new Color(0, 0, 0);
         Color semiTransparentWhite = new Color(255, 255, 255, 220);
+        Font buttonFont = new Font("SansSerif", Font.BOLD, 20);
 
         // Titre
         JLabel titre = new JLabel("\uD83D\uDCC5 Rendez-vous à venir \uD83D\uDCC5", SwingConstants.CENTER);
         titre.setFont(new Font("SansSerif", Font.BOLD, 48));
         titre.setForeground(noir);
         titre.setBorder(BorderFactory.createEmptyBorder(20, 0, 30, 0));
+
+        retourButton = new JButton("Retour");
+        retourButton.setFont(buttonFont);
+        retourButton.setBackground(rouge);
+        retourButton.setForeground(Color.WHITE);
+        retourButton.addActionListener(e -> dispose()); // Ferme la fenêtre
 
         // Liste des rendez-vous
         modelListe = new DefaultListModel<>();
@@ -45,14 +53,27 @@ public class AgendaPatientVue extends JFrame {
         JPanel container = new JPanel(new GridBagLayout());
         container.setOpaque(false);
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.insets = new Insets(0, 0, 20, 0);
-        container.add(titre, gbc);
+        // Placement du bouton "Retour" (en haut à gauche)
+        GridBagConstraints retourGbc = new GridBagConstraints();
+        retourGbc.insets = new Insets(20, 20, 20, 20); // Espacement autour du bouton
+        retourGbc.gridx = 0;
+        retourGbc.gridy = 0;
+        retourGbc.anchor = GridBagConstraints.NORTH; // Position en haut à gauche
+        container.add(retourButton, retourGbc);
 
-        gbc.gridy = 1;
-        container.add(scrollPane, gbc);
+        // Placement du titre, un peu plus bas
+        GridBagConstraints titreGbc = new GridBagConstraints();
+        titreGbc.gridx = 0;
+        titreGbc.gridy = 1;  // Le titre est placé à une ligne plus bas que le bouton
+        titreGbc.insets = new Insets(20, 0, 20, 0); // Espacement autour du titre
+        container.add(titre, titreGbc);
+
+        // Placement de la liste de rendez-vous
+        GridBagConstraints listeGbc = new GridBagConstraints();
+        listeGbc.gridx = 0;
+        listeGbc.gridy = 2;
+        listeGbc.insets = new Insets(0, 0, 20, 0); // Espacement sous la liste
+        container.add(scrollPane, listeGbc);
 
         backgroundPanel.add(container);
         setContentPane(backgroundPanel);
