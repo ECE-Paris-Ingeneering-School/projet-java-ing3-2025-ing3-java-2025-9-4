@@ -16,7 +16,7 @@ public class GestionPatientsVue extends JFrame {
     private JTextField nomField, prenomField, emailField, mdpField;
     private JComboBox<String> roleBox;
     private JCheckBox ancienCheck;
-    private JButton ajouterButton, modifierButton, supprimerButton;
+    private JButton ajouterButton, modifierButton, supprimerButton, retourButton;
 
     public GestionPatientsVue() {
         setTitle("Gestion des Patients - EKSASOTE");
@@ -64,6 +64,12 @@ public class GestionPatientsVue extends JFrame {
         ajouterButton = new JButton("Ajouter");
         modifierButton = new JButton("Modifier");
         supprimerButton = new JButton("Supprimer");
+
+        retourButton = new JButton("Retour");
+        retourButton.setFont(buttonFont);
+        retourButton.setBackground(rouge);
+        retourButton.setForeground(Color.WHITE);
+        retourButton.addActionListener(e -> dispose()); // Ferme la fenêtre
 
         gbc.gridy = 0;
         formPanel.add(createLabel("Nom :", labelFont), gbc);
@@ -132,6 +138,13 @@ public class GestionPatientsVue extends JFrame {
         // Conteneur principal
         JPanel container = new JPanel(new GridBagLayout());
         container.setOpaque(false);
+
+        GridBagConstraints containerGbc2 = new GridBagConstraints(); // Placement bouton Retour
+        containerGbc2.insets = new Insets(20, 20, 20, 20);
+        containerGbc2.gridx = 0;
+        containerGbc2.gridy = 0;
+        containerGbc2.anchor = GridBagConstraints.NORTHWEST; // Ancrage en haut à gauche
+        container.add(retourButton, containerGbc2);
 
         GridBagConstraints containerGbc = new GridBagConstraints();
         containerGbc.insets = new Insets(-50, 20, 20, 20);
