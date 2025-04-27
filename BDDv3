@@ -1,0 +1,187 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Hôte : 127.0.0.1:3306
+-- Généré le : dim. 27 avr. 2025 à 21:26
+-- Version du serveur : 8.2.0
+-- Version de PHP : 8.2.13
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de données : `rendezvous_db`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `disponibilite`
+--
+
+DROP TABLE IF EXISTS `disponibilite`;
+CREATE TABLE IF NOT EXISTS `disponibilite` (
+  `id_disponibilite` int NOT NULL AUTO_INCREMENT,
+  `id_specialiste` int DEFAULT NULL,
+  `id_lieu` int DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `heure` time DEFAULT NULL,
+  `disponible` tinyint(1) DEFAULT '1',
+  PRIMARY KEY (`id_disponibilite`),
+  KEY `id_specialiste` (`id_specialiste`),
+  KEY `id_lieu` (`id_lieu`)
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `disponibilite`
+--
+
+INSERT INTO `disponibilite` (`id_disponibilite`, `id_specialiste`, `id_lieu`, `date`, `heure`, `disponible`) VALUES
+(1, 1, 1, '2025-02-10', '09:00:00', 0),
+(2, 1, 1, '2025-03-05', '10:00:00', 0),
+(3, 2, 1, '2025-04-01', '11:00:00', 0),
+(4, 2, 1, '2025-05-06', '11:00:00', 1),
+(5, 3, 1, '2025-05-10', '09:30:00', 1),
+(6, 3, 1, '2025-06-05', '13:00:00', 1),
+(7, 4, 2, '2025-02-15', '10:30:00', 0),
+(8, 4, 2, '2025-03-10', '09:00:00', 0),
+(9, 5, 2, '2025-04-05', '11:30:00', 0),
+(10, 5, 2, '2025-05-09', '11:30:00', 1),
+(11, 6, 2, '2025-05-15', '15:00:00', 1),
+(12, 6, 2, '2025-06-10', '16:00:00', 1),
+(13, 7, 3, '2025-02-20', '09:00:00', 0),
+(14, 7, 3, '2025-03-15', '10:00:00', 0),
+(15, 8, 3, '2025-04-10', '11:30:00', 0),
+(16, 8, 3, '2025-05-08', '12:30:00', 1),
+(17, 9, 3, '2025-05-14', '14:00:00', 1),
+(18, 10, 3, '2025-06-12', '17:00:00', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `lieu`
+--
+
+DROP TABLE IF EXISTS `lieu`;
+CREATE TABLE IF NOT EXISTS `lieu` (
+  `id_lieu` int NOT NULL AUTO_INCREMENT,
+  `adresse` varchar(255) DEFAULT NULL,
+  `ville` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id_lieu`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `lieu`
+--
+
+INSERT INTO `lieu` (`id_lieu`, `adresse`, `ville`) VALUES
+(1, '10 rue de la Sante', 'Paris'),
+(2, '20 cours Pasteur', 'Bordeaux'),
+(3, '30 boulevard Longchamp', 'Marseille');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `patient`
+--
+
+DROP TABLE IF EXISTS `patient`;
+CREATE TABLE IF NOT EXISTS `patient` (
+  `id_patient` int NOT NULL AUTO_INCREMENT,
+  `nom` varchar(50) DEFAULT NULL,
+  `prenom` varchar(50) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `mot_de_passe` varchar(255) DEFAULT NULL,
+  `ancien_patient` tinyint(1) DEFAULT '0',
+  `role` varchar(20) DEFAULT 'patient',
+  PRIMARY KEY (`id_patient`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `patient`
+--
+
+INSERT INTO `patient` (`id_patient`, `nom`, `prenom`, `email`, `mot_de_passe`, `ancien_patient`, `role`) VALUES
+(1, 'Paul', 'Durand', 'paul@fr', 'paul', 0, 'patient'),
+(2, 'Sophie', 'Martin', 'sophie@fr', 'sophie', 0, 'patient'),
+(3, 'Admin', 'Super', 'admin@fr', 'admin', 0, 'admin');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `rendezvous`
+--
+
+DROP TABLE IF EXISTS `rendezvous`;
+CREATE TABLE IF NOT EXISTS `rendezvous` (
+  `id_rdv` int NOT NULL AUTO_INCREMENT,
+  `id_patient` int DEFAULT NULL,
+  `id_disponibilite` int DEFAULT NULL,
+  `note` text,
+  PRIMARY KEY (`id_rdv`),
+  KEY `id_patient` (`id_patient`),
+  KEY `id_disponibilite` (`id_disponibilite`)
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `rendezvous`
+--
+
+INSERT INTO `rendezvous` (`id_rdv`, `id_patient`, `id_disponibilite`, `note`) VALUES
+(1, 1, 1, NULL),
+(2, 1, 2, NULL),
+(3, 1, 3, NULL),
+(4, 1, 4, NULL),
+(5, 1, 5, NULL),
+(6, 1, 6, NULL),
+(7, 2, 7, NULL),
+(8, 2, 8, NULL),
+(9, 2, 9, NULL),
+(10, 2, 10, NULL),
+(11, 2, 11, NULL),
+(12, 2, 12, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `specialiste`
+--
+
+DROP TABLE IF EXISTS `specialiste`;
+CREATE TABLE IF NOT EXISTS `specialiste` (
+  `id_specialiste` int NOT NULL AUTO_INCREMENT,
+  `nom` varchar(100) DEFAULT NULL,
+  `specialisation` varchar(100) DEFAULT NULL,
+  `qualification` text,
+  PRIMARY KEY (`id_specialiste`)
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `specialiste`
+--
+
+INSERT INTO `specialiste` (`id_specialiste`, `nom`, `specialisation`, `qualification`) VALUES
+(1, 'Monsieur Plomberie', 'Plombier', 'Plomberie generale'),
+(2, 'Madame Electricite', 'Electricien', 'Installations electriques'),
+(3, 'Monsieur Maçonnerie', 'Macon', 'Gros oeuvre et renovation'),
+(4, 'Madame Toiture', 'Couvreur', 'Entretien toitures'),
+(5, 'Monsieur Carrelage', 'Carreleur', 'Pose de carrelage'),
+(6, 'Monsieur Chauffage', 'Chauffagiste', 'Chauffage central'),
+(7, 'Madame Deco', 'Peintre', 'Peinture interieur'),
+(8, 'Monsieur Serrurerie', 'Serrurier', 'Depannage serrures'),
+(9, 'Madame Jardin', 'Paysagiste', 'Amenagement exterieur'),
+(10, 'Monsieur Menuiserie', 'Menuisier', 'Menuiserie bois et PVC');
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
