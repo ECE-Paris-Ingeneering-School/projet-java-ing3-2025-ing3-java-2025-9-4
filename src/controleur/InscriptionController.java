@@ -27,14 +27,20 @@ public class InscriptionController {
                     vue.afficherErreur("Tous les champs sont obligatoires !");
                     return;
                 }
+                // Vérification de l'email
+                if (!email.contains("@")) {
+                    vue.afficherErreur("L'adresse email doit contenir un '@'.");
+                    return;
+                }
+
 
                 Patient nouveauPatient = new Patient(0, nom, prenom, email, motDePasse, false, "patient");
                 boolean success = dao.ajouterPatient(nouveauPatient);
 
                 if (success) {
-                    vue.dispose(); // ✅ Fermer la fenêtre sans message inutile
+                    vue.dispose(); // Fermer la fenêtre sans message inutile
                 } else {
-                    vue.afficherErreur("Erreur lors de l'inscription."); // ✅ On garde l'erreur si problème
+                    vue.afficherErreur("Erreur lors de l'inscription."); // On garde l'erreur si problème
                 }
             }
         });
