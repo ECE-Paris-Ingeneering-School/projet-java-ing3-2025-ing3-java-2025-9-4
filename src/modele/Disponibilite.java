@@ -29,6 +29,6 @@ public class Disponibilite {
 
     @Override
     public String toString() {
-        return date + " à " + heure + " avec " + specialiste + " à " + lieu;
+        return date + " | " + heure + " | " + specialiste + " | " + lieu;
     }
 }

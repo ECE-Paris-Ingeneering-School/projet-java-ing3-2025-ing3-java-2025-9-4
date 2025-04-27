@@ -35,9 +35,9 @@ public class RendezVous {
             return note != null ? note : "Rendez-vous (données manquantes)";
         }
 
-        return disponibilite.getDate() + " à " + disponibilite.getHeure() +
-                " avec " + disponibilite.getSpecialiste().getNom() +
+        return disponibilite.getDate() + " | " + disponibilite.getHeure() +
+                " | " + disponibilite.getSpecialiste().getNom() +
                 " (" + disponibilite.getSpecialiste().getSpecialisation() + ")" +
-                " - " + disponibilite.getLieu().getVille();
+                " | " + disponibilite.getLieu();
     }
 }
