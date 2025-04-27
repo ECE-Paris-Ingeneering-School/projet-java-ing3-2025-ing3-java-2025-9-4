@@ -39,7 +39,7 @@ public class PriseRendezVousVue extends JFrame {
         Font buttonFont = new Font("SansSerif", Font.BOLD, 20);
 
         // Titre avec emojis
-        JLabel titreLabel = new JLabel("📅 Prise de Rendez-vous 🗓️", SwingConstants.CENTER);
+        JLabel titreLabel = new JLabel("🗓️ Prise de Rendez-vous 🗓️", SwingConstants.CENTER);
         titreLabel.setFont(new Font("SansSerif", Font.BOLD, 48));
         titreLabel.setForeground(rouge);
         titreLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 30, 0));
